@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+
 import shutil
 import os
 
@@ -11,13 +12,17 @@ with open(original_file, 'r') as f:
                 
     content = f.read()
 
-    for j in range(1, 4):
+    for j in range(0, 4):
 
-        m_rho = str(-3 + j * 0.5)
+        print(-3 + j * 0.2)
+
+        m_rho = str(-3 + j * 0.05)
 
         mu_rho_set = content.replace("MU_RHO_SET", m_rho)
 
-        for k in range(1, 4):
+        for k in range(0, 4):
+
+            print(-3 + k * 0.2)
 
             b_rho = str(-3 + k * 0.5)
 

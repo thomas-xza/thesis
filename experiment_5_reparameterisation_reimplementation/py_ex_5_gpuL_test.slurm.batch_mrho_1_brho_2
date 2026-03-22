@@ -38,7 +38,7 @@ pwd
 
 ##  Run experiment.
 
-python3 $TMPDIR/experiment_run.py --neurons-n 1024 --batch-n 64 --weights-name mrho_1_brho_2 --training-epochs 6 --rho-w-init -2.5 --rho-b-init -2.0
+python3 $TMPDIR/experiment_run.py --neurons-n 1024 --batch-n 64 --weights-name mrho_1_brho_2 --training-epochs 6 --rho-w-init -2.95 --rho-b-init -2.0
 
 ##  Load weights back.
 
