@@ -17,7 +17,7 @@ class Linear_bayesian(nn.Module):
         
         self.out_features = out_features
 
-        ##  Create tensors based on model initialisation parameters.
+        ##  Generate dynamic tensors for approximation posterior.
         
         self.w_mu = nn.Parameter(torch.Tensor(out_features, in_features).fill_(w_mu_init))
         
@@ -27,9 +27,9 @@ class Linear_bayesian(nn.Module):
         
         self.b_rho = nn.Parameter(torch.Tensor(out_features).fill_(b_rho_init))
 
-        ##  sigma = log(1 + exp(rho))
+        ##  Generate static tensors for prior distribution.
 
-        ##  Generate tensors for sigma, mu values.
+        ##  F.softplus(rho) = log(1 + exp(rho))
 
         self.register_buffer(
             "prior_w_sigma",
@@ -43,12 +43,12 @@ class Linear_bayesian(nn.Module):
 
         self.register_buffer(
             "prior_w_mu",
-            F.softplus(torch.Tensor(out_features, in_features).fill_(0))
+            torch.Tensor(out_features, in_features).fill_(0)
         )
 
         self.register_buffer(
             "prior_b_mu",
-            F.softplus(torch.Tensor(out_features, in_features).fill_(0))
+            torch.Tensor(out_features, in_features).fill_(0)
         )
 
         self.kl_loss = 0
