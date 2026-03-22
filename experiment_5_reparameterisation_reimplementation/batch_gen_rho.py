@@ -12,7 +12,7 @@ with open(original_file, 'r') as f:
                 
     content = f.read()
 
-    for j in range(0, 4):
+    for j in range(0, 1):
 
         print(-3 + j * 0.2)
 
@@ -20,7 +20,7 @@ with open(original_file, 'r') as f:
 
         mu_rho_set = content.replace("MU_RHO_SET", m_rho)
 
-        for k in range(0, 4):
+        for k in range(0, 1):
 
             print(-3 + k * 0.2)
 
