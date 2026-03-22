@@ -65,19 +65,19 @@ parser.add_argument('--sample-quantity',
 
 parser.add_argument('--mu-w-init',
                     required = False,
-                    default = -0.05,
+                    default = 0.1,
                     type = float,
                     help = 'Quantity of samples of θ to take during utilisation.')
 
 parser.add_argument('--mu-b-init',
                     required = False,
-                    default = -0.05,
+                    default = -3.0,
                     type = float,
                     help = 'Quantity of samples of θ to take during utilisation.')
 
 parser.add_argument('--rho-w-init',
                     required = False,
-                    default = -3.0,
+                    default = 0.1,
                     type = float,
                     help = 'Quantity of samples of θ to take during utilisation.')
 

@@ -132,7 +132,7 @@ def train(dl: DataLoader,
 
         ##  Calculate error of prediction.
 
-        print(model.kl(), loss(y_hat, y))
+        # print(model.kl(), loss(y_hat, y))
 
         # print()
 
