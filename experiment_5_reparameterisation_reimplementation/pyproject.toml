@@ -1,0 +1,9 @@
+[project]
+name = "Experiment_5_reparam_retry"
+version = "0.1.0"
+description = "A Python package that can be imported to Google Colab to run reparameterisation."
+readme = "README.md"
+requires-python = ">=3.7"
+dependencies = [
+	     "torch"
+	     ]
