@@ -7,6 +7,9 @@ from .experiment_training_lib import run_training_loop
 
 from .experiment_utilise_lib import run_utilisation_loop_once, run_utilisation_loop_batch
 
+from .mini_model_reparam import Linear_model
+
+
 __all__ = [
     Pi_dataset,
     Linear_bayesian,
