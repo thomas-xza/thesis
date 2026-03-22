@@ -14,8 +14,6 @@ class Linear_model(nn.Module):
         
         super().__init__()
 
-        self.kl_model = 0
-
         self.linear_relu_stack = nn.Sequential(
             Linear_bayesian(1, n, mu_w_init, mu_b_init, rho_w_init, rho_b_init),
             nn.ReLU(),
@@ -26,6 +24,8 @@ class Linear_model(nn.Module):
         )
 
         self.params_n = self.calc_params_n(self.linear_relu_stack)
+
+        self.kl_m = 0
 
         ##  Non-probabilistic equivalent:
 
@@ -41,12 +41,7 @@ class Linear_model(nn.Module):
         # nn.init.uniform_(self.linear_relu_stack[2].weight, a=-0.25, b=0.25)
         # nn.init.uniform_(self.linear_relu_stack[4].weight, a=-0.25, b=0.25)
 
-
-    def kl(self):
-
-        return self.kl_model
         
-
     def forward(self, x: torch.Tensor):
 
         y_hat = self.linear_relu_stack(x)
@@ -57,11 +52,11 @@ class Linear_model(nn.Module):
 
         kl_layers = tuple(map(lambda l: l.kl(), linear_layers))
 
-        # print(kl_layers)
+        kl_model = sum(kl_layers) / self.params_n
 
-        self.kl_model = sum(kl_layers) / self.params_n
+        self.kl_m = kl_model
 
-        return y_hat
+        return y_hat, kl_model
     
 
     def calc_params_n(self, model: nn.Module):

@@ -128,7 +128,7 @@ def train(dl: DataLoader,
 
         ##  Run X through model, generate prediction.
         
-        y_hat = model(X)
+        y_hat, kl_model = model(X)
 
         ##  Calculate error of prediction.
 
@@ -136,7 +136,9 @@ def train(dl: DataLoader,
 
         # print()
 
-        loss_res = loss(y_hat, y) + model.kl()
+        loss_res = loss(y_hat, y) + kl_model
+
+        print(loss(y_hat, y), kl_model)
 
         ##  Compute gradients numerically via backpropagation, back to
         ##  leaf nodes of graph.

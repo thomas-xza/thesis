@@ -104,7 +104,7 @@ class Linear_bayesian(nn.Module):
         ##  Note that this final result will be based on the full
         ##  batch size.
         
-        # self.kl_loss = kl_w + kl_b
+        self.kl_loss = kl_w + kl_b
 
-        return F.linear(x, w, b), (kl_w + kl_b)
+        return F.linear(x, w, b)
 
