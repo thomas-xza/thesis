@@ -12,3 +12,7 @@ dependencies = [
 	     "torch",
 	     "matplotlib"
 	     ]
+
+[tool.setuptools.packages.find]
+# Only include the folder you actually want to import
+include = ["reparam"]
