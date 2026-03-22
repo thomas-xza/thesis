@@ -136,14 +136,8 @@ def train(dl: DataLoader,
 
         # print()
 
-        try: 
-            
-            loss_res = loss(y_hat, y) + model.kl()
+        loss_res = loss(y_hat, y) + model.kl()
 
-        except:
-
-            print("ERROR:", y_hat, y)
-        
         ##  Compute gradients numerically via backpropagation, back to
         ##  leaf nodes of graph.
         
