@@ -29,7 +29,7 @@ class Linear_bayesian(nn.Module):
 
         ##  sigma = log(1 + exp(rho))
 
-        ##  Generate tensors for sigma values.
+        ##  Generate tensors for sigma, mu values.
 
         self.register_buffer(
             "prior_w_sigma",
@@ -41,12 +41,16 @@ class Linear_bayesian(nn.Module):
             F.softplus(torch.Tensor(out_features, in_features).fill_(b_rho_init))
         )
 
-        ##  Setup distribution based on sigma values.
-        
-        self.prior_w_dist = dist.Normal(0, self.prior_w_sigma)
+        self.register_buffer(
+            "prior_w_mu",
+            F.softplus(torch.Tensor(out_features, in_features).fill_(0))
+        )
 
-        self.prior_b_dist = dist.Normal(0, self.prior_b_sigma)
-        
+        self.register_buffer(
+            "prior_b_mu",
+            F.softplus(torch.Tensor(out_features, in_features).fill_(0))
+        )
+
         self.kl_loss = 0
 
 
@@ -57,6 +61,14 @@ class Linear_bayesian(nn.Module):
         
     def forward(self, x):
 
+        ##  Setup distribution based on sigma values.
+        ##  Despite being static in value, will only be on correct
+        ##  device if defined within forward() pass.
+        
+        self.prior_w_dist = dist.Normal(self.prior_w_mu, self.prior_w_sigma)
+
+        self.prior_b_dist = dist.Normal(self.prior_b_mu, self.prior_b_sigma)
+        
         ##  PyTorch built-ins used as much as possible, in this
         ##  implementation.
         
