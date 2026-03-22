@@ -1,7 +1,0 @@
-Metadata-Version: 2.4
-Name: Experiment_5_reparam_retry
-Version: 0.1.0
-Summary: A Python package that can be imported to Google Colab to run reparameterisation.
-Requires-Python: >=3.7
-Description-Content-Type: text/markdown
-Requires-Dist: torch

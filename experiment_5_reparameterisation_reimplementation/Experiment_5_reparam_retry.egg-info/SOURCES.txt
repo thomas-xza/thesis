@@ -1,6 +1,0 @@
-pyproject.toml
-Experiment_5_reparam_retry.egg-info/PKG-INFO
-Experiment_5_reparam_retry.egg-info/SOURCES.txt
-Experiment_5_reparam_retry.egg-info/dependency_links.txt
-Experiment_5_reparam_retry.egg-info/requires.txt
-Experiment_5_reparam_retry.egg-info/top_level.txt
