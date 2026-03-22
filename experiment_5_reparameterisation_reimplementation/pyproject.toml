@@ -14,5 +14,5 @@ dependencies = [
 	     ]
 
 [tool.setuptools.packages.find]
-# Only include the folder you actually want to import
-include = ["reparam"]
+where = ["."]
+include = ["reparam*"]

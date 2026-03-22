@@ -1,0 +1,8 @@
+Metadata-Version: 2.4
+Name: reparam
+Version: 0.1.0
+Summary: A Python package that can be imported to Google Colab to run reparameterisation.
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+Requires-Dist: torch
+Requires-Dist: matplotlib
