@@ -131,10 +131,6 @@ def train(dl: DataLoader,
 
         ##  Calculate error of prediction.
 
-        # print(model.kl(), loss(y_hat, y))
-
-        # print()
-
         loss_res = loss(y_hat, y) + kl_model
 
         print(loss(y_hat, y), kl_model)
@@ -215,10 +211,12 @@ def test(dl: DataLoader, model: nn.Module, loss: nn.Module):
             
             X, y = X.to(device), y.to(device)
             
-            y_hat = model(X)
-            
-            loss_res = loss(y_hat, y) + model.kl()
+            y_hat, kl_model = model(X)
 
+            ##  Calculate error of prediction.
+
+            loss_res = loss(y_hat, y) + kl_model
+            
             test_loss += loss_res
 
             # test_loss += loss(y_hat, y).item()
