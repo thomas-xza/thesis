@@ -3,7 +3,7 @@
 import torch
 from torch import nn
 
-from linear_bayesian import Linear_bayesian
+from reparam.linear_bayesian import Linear_bayesian
 # from sigmoid_param import Parameterised_sigmoid
 
 class Linear_model(nn.Module):

@@ -10,9 +10,8 @@ from torch.utils.data import DataLoader
 from torchvision import datasets
 from torchvision.transforms import ToTensor
 
-from pi_dataset import Pi_dataset
 # from custom_loss import BCELoss_plus_KL
-from linear_bayesian import Linear_bayesian
+from reparam.linear_bayesian import Linear_bayesian
 
 torch.set_default_dtype(torch.float32)
 torch.manual_seed(239852)
