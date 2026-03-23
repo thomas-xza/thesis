@@ -10,7 +10,6 @@ from torch.utils.data import DataLoader
 from torchvision import datasets
 from torchvision.transforms import ToTensor
 
-# from custom_loss import BCELoss_plus_KL
 from reparam.linear_bayesian import Linear_bayesian
 
 torch.set_default_dtype(torch.float32)
@@ -19,13 +18,13 @@ torch.manual_seed(239852)
 device = torch.accelerator.current_accelerator().type if torch.accelerator.is_available() else "cpu"
 
 
-def BCE_KL_loss(model: nn.Module, y_hat, y):
+# def BCE_KL_loss(model: nn.Module, y_hat, y):
 
-    BCE = F.binary_cross_entropy(y_hat, y, reduction='sum')
+#     BCE = F.binary_cross_entropy(y_hat, y, reduction='sum')
 
-    total_kl = sum(layer.kl_loss for layer in model.modules() if hasattr(layer, 'kl_loss'))
+#     total_kl = sum(layer.kl_loss for layer in model.modules() if hasattr(layer, 'kl_loss'))
 
-    return data_loss + (total_kl / num_batches)
+#     return data_loss + (total_kl / num_batches)
 
 
 def calc_kl(model: nn.Module):
@@ -61,7 +60,12 @@ def model_params_n(model: nn.Module):
     return sum(products)
         
 
-def run_training_loop(model : nn.Module, train_dl: DataLoader, test_dl: DataLoader, epochs: int, filename: str):
+def run_training_loop(model: nn.Module,
+                      train_dl: DataLoader,
+                      test_dl: DataLoader,
+                      epochs: int,
+                      filename: str,
+                      kl_loss_ratio: float):
 
     ##  Define loss.
 
@@ -86,11 +90,11 @@ def run_training_loop(model : nn.Module, train_dl: DataLoader, test_dl: DataLoad
 
         print(f"Training...")
 
-        train(train_dl, model, loss, optimizer)
+        train(train_dl, model, loss, optimizer, kl_loss_ratio)
 
         print(f"Testing...")
 
-        test(test_dl, model, loss)
+        test(test_dl, model, loss, kl_loss_ratio)
 
     ##  Output training time.
 
@@ -115,7 +119,8 @@ def run_training_loop(model : nn.Module, train_dl: DataLoader, test_dl: DataLoad
 def train(dl: DataLoader,
           model: nn.Module,
           loss: nn.Module,
-          optimizer: torch.optim.Optimizer):
+          optimizer: torch.optim.Optimizer,
+          kl_loss_ratio: float):
 
     ##  Put model into training mode; ensures gradient tracking.
 
@@ -131,7 +136,7 @@ def train(dl: DataLoader,
 
         ##  Calculate error of prediction.
 
-        loss_res = loss(y_hat, y) + kl_model
+        loss_res = (1 - kl_loss_ratio) * loss(y_hat, y) + (kl_loss_ratio * kl_model)
 
         print("Loss functions:", loss(y_hat, y), kl_model)
 
@@ -197,7 +202,10 @@ def train(dl: DataLoader,
             # print(f"loss_1: {loss_1:>7f}  [{current:>5d}/{size:>5d}]")
 
 
-def test(dl: DataLoader, model: nn.Module, loss: nn.Module):
+def test(dl: DataLoader,
+         model: nn.Module,
+         loss: nn.Module,
+         kl_loss_ratio: float):
 
     ##  Setup parameters for loss function.
 
@@ -215,7 +223,7 @@ def test(dl: DataLoader, model: nn.Module, loss: nn.Module):
 
             ##  Calculate error of prediction.
 
-            loss_res = loss(y_hat, y) + kl_model
+            loss_res = (1 - kl_loss_ratio) * loss(y_hat, y) + (kl_loss_ratio * kl_model)
             
             test_loss += loss_res
 
