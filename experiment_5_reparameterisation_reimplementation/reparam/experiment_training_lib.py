@@ -93,7 +93,9 @@ def train(dl: DataLoader,
 
         ##  Calculate error of prediction.
 
-        loss_res = (1 - kl_loss_ratio) * loss(y_hat, y) + (kl_loss_ratio * kl_model)
+        # loss_res = (1 - kl_loss_ratio) * loss(y_hat, y) + (kl_loss_ratio * kl_model)
+
+        loss_res = loss(y_hat, y)
 
         print("Loss functions:", loss(y_hat, y), kl_model)
 
@@ -180,7 +182,9 @@ def test(dl: DataLoader,
 
             ##  Calculate error of prediction.
 
-            loss_res = (1 - kl_loss_ratio) * loss(y_hat, y) + (kl_loss_ratio * kl_model)
+            loss_res = loss(y_hat, y).item()
+
+            # loss_res = (1 - kl_loss_ratio) * loss(y_hat, y) + (kl_loss_ratio * kl_model)
             
             test_loss += loss_res
 
