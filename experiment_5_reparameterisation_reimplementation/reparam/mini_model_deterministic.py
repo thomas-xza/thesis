@@ -39,4 +39,4 @@ class Linear_model(nn.Module):
 
         out = torch.sigmoid(logits)
         
-        return out
+        return out, 0
