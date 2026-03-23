@@ -80,7 +80,7 @@ class Linear_bayesian(nn.Module):
         
         b_sigma = F.softplus(self.b_rho)
 
-        print(w_sigma.sum())
+        print("Sigma summation:", w_sigma.sum())
 
         ##  Setup approximation function based on Parameter objects.
         

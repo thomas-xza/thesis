@@ -133,7 +133,7 @@ def train(dl: DataLoader,
 
         loss_res = loss(y_hat, y) + kl_model
 
-        print(loss(y_hat, y), kl_model)
+        print("Loss functions:", loss(y_hat, y), kl_model)
 
         ##  Compute gradients numerically via backpropagation, back to
         ##  leaf nodes of graph.
@@ -227,6 +227,6 @@ def test(dl: DataLoader, model: nn.Module, loss: nn.Module):
     
     # correct /= len(dl.dataset)
     
-    print(f"{test_loss:>8f}")
+    print(f"Test loss: {test_loss:>8f}")
 
 
