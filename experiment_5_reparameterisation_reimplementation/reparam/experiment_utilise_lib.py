@@ -10,7 +10,7 @@ from torch.utils.data import DataLoader, TensorDataset, Subset
 from torchvision import datasets
 from torchvision.transforms import ToTensor
 
-# import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 
 
 torch.set_default_dtype(torch.float32)
