@@ -3,7 +3,7 @@ import torch
 from torch import nn
 
 
-class Linear_model(nn.Module):
+class Linear_model_deterministic(nn.Module):
     
     def __init__(self, n: int, udist: [int, int], random_seed: int):
         

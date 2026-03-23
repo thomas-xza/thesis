@@ -6,7 +6,7 @@ from torch import nn
 from reparam.linear_bayesian import Linear_bayesian
 # from sigmoid_param import Parameterised_sigmoid
 
-class Linear_model(nn.Module):
+class Linear_model_reparam(nn.Module):
     
     def __init__(self, n: int, mu_w_init: float, mu_b_init: float, rho_w_init: float, rho_b_init: float):
 
