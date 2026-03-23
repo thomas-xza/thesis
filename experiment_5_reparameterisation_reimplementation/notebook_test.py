@@ -64,7 +64,7 @@ def main():
 
     ##  Either load weights or load training data.
 
-    if env.weights_load is not None:
+    if env["weights_load"] is not None:
         
         run_utilisation_loop_one(
                     model,
@@ -72,7 +72,7 @@ def main():
                     env["sample_quantity"]
         )
 
-    elif env.weights_load_batch is not None:
+    elif env["weights_load_batch"] is not None:
 
         run_utilisation_loop_batch(
                     model,
