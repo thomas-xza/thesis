@@ -97,7 +97,7 @@ def train(dl: DataLoader,
 
         loss_res = loss(y_hat, y)
 
-        print("Loss functions:", loss(y_hat, y), kl_model)
+        # print("Loss functions:", loss(y_hat, y), kl_model)
 
         ##  Compute gradients numerically via backpropagation, back to
         ##  leaf nodes of graph.
