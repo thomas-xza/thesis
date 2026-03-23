@@ -55,7 +55,7 @@ def run_utilisation_loop_once(model: nn.Module, weights_path: str, graph_filenam
 
     # checkpoint = torch.load(io.BytesIO(decompressed_data),
     
-    checkpoint = torch.load(io.BytesIO(weights_path),
+    checkpoint = torch.load(weights_path,
                            weights_only = True,
                            map_location=torch.device('cpu')
                            )
