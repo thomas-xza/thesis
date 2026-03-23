@@ -22,11 +22,11 @@ def run_utilisation_loop_batch(model: nn.Module, batch_name: str, sample_quantit
 
     print("loop batch")
 
-    directory = Path('./weights/')
+    directory = Path('./params/')
 
     # Find all files with batch_name in filename
     
-    for file in directory.glob(f"model_weights*{batch_name}*xz"):
+    for file in directory.glob(f"model_params*{batch_name}*xz"):
 
         print(str(file))
         
@@ -36,28 +36,28 @@ def run_utilisation_loop_batch(model: nn.Module, batch_name: str, sample_quantit
 
             graph_filename = f"{batch_name}{dist_metadata}"
 
-            weights_path = f"./{str(file)}"
+            params_path = f"./{str(file)}"
 
-            run_utilisation_loop_once(model, weights_path, graph_filename)
+            run_utilisation_loop_once(model, params_path, graph_filename)
             
             # Do something with the file
 
 
-def run_utilisation_loop_once(model: nn.Module, weights_path: str, graph_filename: str, sample_quantity: int):
+def run_utilisation_loop_once(model: nn.Module, params_path: str, graph_filename: str, sample_quantity: int):
 
     ##  Decompress to memory.
 
-    # with lzma.open(weights_path, 'rb') as f:
+    # with lzma.open(params_path, 'rb') as f:
 
     #     decompressed_data = f.read()
 
-    ##  Load weights.
+    ##  Load params.
 
     # checkpoint = torch.load(io.BytesIO(decompressed_data),
     
-    checkpoint = torch.load(weights_path,
+    checkpoint = torch.load(params_path,
                            weights_only = True,
-                           map_location=torch.device('cpu')
+                           ##map_location=torch.device('cpu')
                            )
 
     old_state_dict = checkpoint['state_dict'] if 'state_dict' in checkpoint else checkpoint
@@ -102,13 +102,17 @@ def run_utilisation_loop_once(model: nn.Module, weights_path: str, graph_filenam
 
                 for _ in range(sample_quantity):
 
-                    sample_set = sample_set + (model(X),)
+                    y_hat_sample, _ = model(X)
+
+                    sample_set = sample_set + (y_hat_sample,)
+
+                print(sample_set)
 
                 ##  Take mean of samples.
 
                 y_hat = torch.stack(sample_set).mean(dim=0)
                     
-                print(X.item(), y_hat.item())
+                print(f"p({X.item()}) = {y_hat.item()}")
 
                 ##  Store for later plotting
 
@@ -151,6 +155,8 @@ def run_utilisation_loop_once(model: nn.Module, weights_path: str, graph_filenam
             plt.tight_layout()
 
             plt.savefig(f"{graph_filename}.pdf", dpi=300)
-            plt.close()      
+            plt.close()
+
+            return graph_filename
 
     
