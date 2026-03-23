@@ -18,6 +18,48 @@ torch.manual_seed(239852)
 device = torch.accelerator.current_accelerator().type if torch.accelerator.is_available() else "cpu"
 
 
+# def BCE_KL_loss(model: nn.Module, y_hat, y):
+
+#     BCE = F.binary_cross_entropy(y_hat, y, reduction='sum')
+
+#     total_kl = sum(layer.kl_loss for layer in model.modules() if hasattr(layer, 'kl_loss'))
+
+#     return data_loss + (total_kl / num_batches)
+
+
+def calc_kl(model: nn.Module):
+
+    total_kl = sum(
+        layer.kl_loss for layer in model.modules() if hasattr(layer, 'kl_loss')
+    ) / model_params_n(model)
+
+
+def model_params_n(model: nn.Module):
+
+    ##  Takes a model, and finds |θ|, that is, the quantity of weights
+    ##  and biases across all layers.
+
+    ##  Extract layers.
+
+    linear_layers = tuple(filter(
+        lambda x: isinstance(x, Linear_bayesian), model.modules()
+    ))
+
+    ##  Extract neurons in to each layer.
+
+    features = tuple(map(lambda m: m.in_features, linear_layers))
+
+    ##  Setup pairs of adjacent layers.
+
+    pairs = list(map(lambda i: (features[i], features[i+1]), range(len(features)-1)))
+
+    ##  Multiply each pair.
+
+    products = list(map(lambda pair: pair[0] * pair[1], pairs))
+
+    return sum(products)
+        
+
 def run_training_loop(model: nn.Module,
                       train_dl: DataLoader,
                       test_dl: DataLoader,
@@ -193,5 +235,4 @@ def test(dl: DataLoader,
     # correct /= len(dl.dataset)
     
     print(f"Test loss: {test_loss:>8f}")
-
 
