@@ -45,17 +45,17 @@ def run_utilisation_loop_batch(model: nn.Module, batch_name: str, sample_quantit
 
 def run_utilisation_loop_once(model: nn.Module, weights_path: str, graph_filename: str, sample_quantity: int):
 
-    ##  For loop here to iterate over all weights available.
-
     ##  Decompress to memory.
 
-    with lzma.open(weights_path, 'rb') as f:
+    # with lzma.open(weights_path, 'rb') as f:
 
-        decompressed_data = f.read()
+    #     decompressed_data = f.read()
 
     ##  Load weights.
 
-    checkpoint = torch.load(io.BytesIO(decompressed_data),
+    # checkpoint = torch.load(io.BytesIO(decompressed_data),
+    
+    checkpoint = torch.load(io.BytesIO(weights_path),
                            weights_only = True,
                            map_location=torch.device('cpu')
                            )
@@ -88,7 +88,7 @@ def run_utilisation_loop_once(model: nn.Module, weights_path: str, graph_filenam
 
         # for i in range(1):
 
-            outputs_set = []
+            outputs_set = ()
             
             for batch, (X,) in enumerate(dl):
 
@@ -104,11 +104,15 @@ def run_utilisation_loop_once(model: nn.Module, weights_path: str, graph_filenam
 
                     sample_set = sample_set + (model(X),)
 
+                ##  Take mean of samples.
+
                 y_hat = torch.stack(sample_set).mean(dim=0)
                     
                 print(X.item(), y_hat.item())
 
-                outputs_set.append((X.item(), y_hat.squeeze(0).item()))
+                ##  Store for later plotting
+
+                outputs_set = outputs_set + ((X.item(), y_hat.squeeze(0).item()),)
                 
             # inner_tensor = torch.stack(outputs_set, dim=0)
 
