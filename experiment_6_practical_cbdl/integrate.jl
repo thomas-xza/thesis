@@ -2,38 +2,86 @@ using Plots
 using Trapz
 
 
-function integrate_pdf(xs :: NTuple{N, Float64} , ys :: NTuple{N, Float64}) where N
-    
-        # p = plot(collect(x_tuple), collect(y_floats))
+function main(a :: Float64 = 1.57,
+              b :: Float64 = 4.71
+              )
 
-        # savefig(p, replace(file, ".txt" => ".pdf"))
+    ys_k_v = plaintext_to_tuples("model_params_batch_256_epochs_2_mcdrop_seed_")
 
-        # println(y_floats)
+    pxlnxs_k_v = shannon_entropy(ys_k_v)
 
-        # println(zipped_x_y)
+    xs = Tuple(a:0.015625:b)
 
-        return trapz(collect(xs), collect(ys))    
+    shannon_integrands_k_v = Dict{String, Float64}()
+
+    for (k, px_ln_xs) in pxlnxs_k_v
+
+        # println(px_ln_xs)
+
+        println(typeof(px_ln_xs))
+
+        println(typeof(xs))
+
+        shannon_integrands_k_v[k] = integrate_pdf(xs, px_ln_xs)
+        
+    end
+
+    return shannon_integrands_k_v
 
 end
 
 
-function integrate_pdfs_set(a :: Float64 = 1.57, b :: Float64 = 4.71)
+function integrate_pdf(xs :: NTuple{N, Float64},
+                       ys :: NTuple{N, Float64}
+                       ) where N
 
-    files = filter(f -> endswith(f, ".txt"), readdir())
+    # p = plot(collect(x_tuple), collect(y_floats))
 
-    x_interval = 1.57:0.015625:4.71
+    # savefig(p, replace(file, ".txt" => ".pdf"))
 
-    integrands = Float64[]
+    # println(y_floats)
+
+    # println(zipped_x_y)
+
+    return trapz(collect(xs), collect(ys))    
+
+end
+
+
+function shannon_entropy(ys_k_v :: Dict{String, Tuple{Vararg{Float64}}})
+    
+    pxlnxs_k_v = Dict{String, Tuple{Vararg{Float64}}}()
+
+    for (k, ys) in ys_k_v
+
+        pxlnxs_k_v[k] = map(y -> y > 0 ? -y * log(y) : 0.0, ys)
+
+    end
+
+    return pxlnxs_k_v
+
+end
+
+
+function plaintext_to_tuples(batch_name :: String)
+
+    files = filter(f -> startswith(f, batch_name) && endswith(f, ".txt"), readdir())
+
+    # integrands = Float64[]
+
+    # xs_k_v = Dict{String, NTuple{201, Float64}}()
+
+    ys_k_v = Dict{String, Tuple{Vararg{Float64}}}()
 
     for file in files
 
-        name_only = replace(file, ".txt" => "")
+        pdf_set_name = replace(file, ".txt" => "")
 
         raw_content = read(file, String)
 
         y_vals = split(rstrip(raw_content), "\n")
 
-        y_floats = Base.front(Tuple(parse.(Float64, y_vals)))
+        ys_k_v[pdf_set_name] = Base.front(Tuple(parse.(Float64, y_vals)))
 
         # println(typeof(x_tuple))
 
@@ -41,13 +89,11 @@ function integrate_pdfs_set(a :: Float64 = 1.57, b :: Float64 = 4.71)
 
         # println(typeof(y_floats))
 
-        integrands = vcat(integrands, integrate_pdf(Tuple(x_interval), y_floats))
-
     end
 
-    return integrands
+    return ys_k_v
 
 end
 
 
-println(integrate_pdfs_set())
+println(main())
