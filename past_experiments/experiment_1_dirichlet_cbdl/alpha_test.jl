@@ -76,8 +76,6 @@ function calc_entropy(all_perms :: Vector{Vector{UInt64}})
 
     # println(x_range)
 
-    println(all_perms)
-
     all_entropy = Vector{Float64}[]
 
     highest_entropy = -1024
